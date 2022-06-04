@@ -46,7 +46,7 @@ if [ ! -f ${outGeneLoc} ]
 
   then
   
-    sed '1d' hg19_ensembl_prot_linc_basicGeneInfo.txt | awk -v OFS="\t" -v kb=${kb} '{print "chr"$1,$2-(kb * 10^3),$3+(kb * 10^3),$4}' | sort -u > er1
+    sed '1d' ./supportingFiles/hg19_ensembl_prot_linc_basicGeneInfo.txt | awk -v OFS="\t" -v kb=${kb} '{print "chr"$1,$2-(kb * 10^3),$3+(kb * 10^3),$4}' | sort -u > er1
     
     # check chromosome ends
     
@@ -56,7 +56,7 @@ if [ ! -f ${outGeneLoc} ]
 
        awk -v chr=${j} '$1 == "chr"chr' er1 > er2
         
-       end=`awk -v chr=${j} '$1 == chr {print $2}' chromsizes.txt`
+       end=`awk -v chr=${j} '$1 == chr {print $2}' ./supportingFiles/chromsizes.txt`
         
        awk -v OFS="\t" -v end=${end} '{if ($2 < 0) {$2 = 0}; if ($3 > end) {$3 = end}; print $0}' er2 >> ${outGeneLoc}
         
@@ -129,7 +129,7 @@ for i in `ls ./chromHMMdata/E*bed`
   
     id=`echo ${i} | sed 's@./chromHMMdata/@@' | sed 's/_25_imputed12marks_mnemonics.bed//'`
     
-    tissue=`awk -v roadmap=${id} '$3 == roadmap {print $2}' chromHMMinfo.txt`
+    tissue=`awk -v roadmap=${id} -F '\t' '$4 == roadmap {print $3}' ./supportingFiles/chromHMMinfo.txt`
     
     bedtools intersect -wao -a ${outGeneLoc} -b ${i} | awk -v OFS="\t" -v tissue=${tissue} '$8 != "." {print $1,$2,$3,$4,tissue,$8,$9}' > hg19geneRegions_bpENCODEchromHMM_${tissue}_${kb}kb.txt
            
