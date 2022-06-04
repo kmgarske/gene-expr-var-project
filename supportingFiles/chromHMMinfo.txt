@@ -1,0 +1,10 @@
+rankMetric	chromHMMname	chromHMMannotation	RoadmapID
+crossTissue	Universal	Universal	genome
+blood	Primary mononuclear cells from peripheral blood	PBMC	E062
+breast	Breast Myoepithelial Primary Cells	BreastMyo	E027
+colon	Sigmoid Colon	SigmoidColon	E106
+fat	Adipose Nuclei	Adipose	E063
+liver	Liver	Liver	E066
+lung	Lung	Lung	E096
+neuron	H9 Derived Neuron Cultured Cells	NeuronCult	E010
+stomach	Stomach Smooth Muscle	StomachSM	E111
