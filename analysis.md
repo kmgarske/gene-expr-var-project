@@ -1,5 +1,7 @@
 # 
 
+This is all done in bash
+
 ## Download and pre-process the data 
 
 ### Secreted proteins
@@ -28,28 +30,77 @@ unzip 41586_2016_BFnature19057_MOESM241_ESM.zip
 
 ### Houskeeping genes
 
-```sh
+```bash
 
 wget https://housekeeping.unicamp.br/Housekeeping_GenesHuman.csv
 
 ```
 
+### Gene regions
+
+```bash
+
+kb=10 # set how many kb you want around the gene 
+
+outGeneLoc="hg19_geneLoc_extend${kb}kb.bed"
+
+if [ ! -f ${outGeneLoc} ]
+
+  then
+  
+    sed '1d' hg19_ensembl_prot_linc_basicGeneInfo.txt | awk -v OFS="\t" -v kb=${kb} '{print "chr"$1,$2-(kb * 10^3),$3+(kb * 10^3),$4}' | sort -u > er1
+    
+    # check chromosome ends
+    
+    for j in {1..22}
+
+     do
+
+       awk -v chr=${j} '$1 == "chr"chr' er1 > er2
+        
+       end=`awk -v chr=${j} '$1 == chr {print $2}' chromsizes.txt`
+        
+       awk -v OFS="\t" -v end=${end} '{if ($2 < 0) {$2 = 0}; if ($3 > end) {$3 = end}; print $0}' er2 >> ${outGeneLoc}
+        
+    done
+    
+fi
+
+```
+
 ### Genome annotations
 
-```sh
+```bash
 
 wget https://storage.googleapis.com/broad-alkesgroup-public/LDSCORE/baseline_v1.1_bedfiles.tgz
 
 tar zxvf baseline_v1.1_bedfiles.tgz baseline_v1.1/DHS_peaks_Trynka.bed baseline_v1.1/Enhancer_Hoffman.bed baseline_v1.1/Repressed_Hoffman.bed baseline_v1.1/PromoterFlanking_Hoffman.bed baseline_v1.1/SuperEnhancer_Hnisz.bed baseline_v1.1/Transcribed_Hoffman.bed
 
+## overlap with gene regions
+
+for i in `ls ./baseline_v1.1/*bed` 
+
+  do
+  
+    annotation=`echo ${i} | sed 's@./baseline_v1.1/@@' | sed 's/.bed//'`
+    
+    bedtools intersect -wao -a ${outGeneLoc} -b ${i} | awk -v OFS="\t" -v ann=${annotation} '{print $1,$2,$3,$4,ann,$8}' > hg19geneRegions_bp_${annotation}_${kb}kb.txt
+
+done
 
 ```
 
 ### ChromHMM chromatin states
 
-Get the chromHMM chromatin states for various tissues assessed in the current study
+Get the chromHMM chromatin states for various tissues assessed in the current study as well as the universal chromHMM states; overlap with gene regions
 
 ```bash
+
+mkdir chromHMMdata
+
+cd chromHMMdata/
+
+## tissue-level
 
 for i in `echo 'E062 E027 E106 E063 E066 E096 E010 E111'`
 
@@ -59,29 +110,55 @@ for i in `echo 'E062 E027 E106 E063 E066 E096 E010 E111'`
     
     gunzip ${i}_25_imputed12marks_mnemonics.bed.gz 
     
-    tissue=`awk -v roadmap=${i} '$3 == roadmap {print $2}' chromHMMinfo.txt` 
-
-    sed '1d' /Genomics/ayroleslab2/kristina/geneExpVarProject/annotationData/hg19_geneAnn/hg19_ensembl_prot_linc_basicGeneInfo.txt | awk -v OFS="\t" '{print "chr"$1,$2-10000,$3+10000,$4}' | sort -u | awk -v OFS="\t" '{if ($2 < 0) {$2 = 0}; print $0}' | bedtools intersect -wao -a - -b ${i}_25_imputed12marks_mnemonics.bed | awk -v OFS="\t" -v tissue=${tissue} '$8 != "." {print $1,$2,$3,$4,tissue,$8,$9}' > hg19geneRegions_bpENCODEchromHMM_${tissue}_10kb.txt
-    
 done
 
-```
-
-Get the universal chromatin states
-
-```bash
+## universal
 
 wget https://public.hoffman2.idre.ucla.edu/ernst/1G6UT/hg19_genome_100_segments.bed.gz
 
 gunzip hg19_genome_100_segments.bed.gz
 
+cd ../
+
+###############################
+## overlap with gene regions ##
+
+## tissue-level
+
+for i in `ls ./chromHMMdata/E*bed`
+
+  do
+  
+    id=`echo ${i} | sed 's@./chromHMMdata/@@' | sed 's/_25_imputed12marks_mnemonics.bed//'`
+    
+    tissue=`awk -v roadmap=${id} '$3 == roadmap {print $2}' chromHMMinfo.txt`
+    
+    bedtools intersect -wao -a ${outGeneLoc} -b ${i} | awk -v OFS="\t" -v tissue=${tissue} '$8 != "." {print $1,$2,$3,$4,tissue,$8,$9}' > hg19geneRegions_bpENCODEchromHMM_${tissue}_${kb}kb.txt
+           
+done
+
+## universal
+
 tissue="genome"
 
-i="/Genomics/ayroleslab2/kristina/geneExpVarProject/annotationData/ENCODEdata/hg19_genome_100_segments.bed"
+i="./chromHMMdata/hg19_genome_100_segments.bed"
 
-sed '1d' /Genomics/ayroleslab2/kristina/geneExpVarProject/annotationData/hg19_geneAnn/hg19_ensembl_prot_linc_basicGeneInfo.txt | awk -v OFS="\t" '{print "chr"$1,$2-10000,$3+10000,$4}' | sort -u | awk -v OFS="\t" '{if ($2 < 0) {$2 = 0}; print $0}' | bedtools intersect -wao -a - -b ${i} | awk -v OFS="\t" -v tissue=${tissue} '$8 != "." {print $1,$2,$3,$4,tissue,$8,$9}' > hg19geneRegions_bpENCODEchromHMM_${tissue}_10kb.txt
+bedtools intersect -wao -a ${outGeneLoc} -b ${i} | awk -v OFS="\t" -v tissue=${tissue} '$8 != "." {print $1,$2,$3,$4,tissue,$8,$9}' > hg19geneRegions_bpENCODEchromHMM_${tissue}_${kb}kb.txt
 
 ```
+
+## 
+
+Make sure you have the following R packages and their dependencies installed: tidyverse, ppcor, 
+
+```bash
+
+Rscript ./summarizeAnnotations_propGeneRegions.R <path/to/varrank/csv> <path/to/meanrank/csv>
+
+```
+
+
+
 
 
 ```R
