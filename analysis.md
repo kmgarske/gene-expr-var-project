@@ -1,7 +1,5 @@
 # 
 
-This is all done in bash
-
 ## Download and pre-process the data 
 
 ### Secreted proteins
@@ -147,29 +145,24 @@ bedtools intersect -wao -a ${outGeneLoc} -b ${i} | awk -v OFS="\t" -v tissue=${t
 
 ```
 
-## 
+Summarize the chromHMM state information into proportion of gene regions made up of each of the state functional annotations
 
-Make sure you have the following R packages and their dependencies installed: tidyverse, ppcor, 
+Make sure you have the following R packages and their dependencies installed: tidyverse
 
 ```bash
 
-Rscript ./summarizeAnnotations_propGeneRegions.R <path/to/varrank/csv> <path/to/meanrank/csv>
+Rscript ./summarizeAnnotations_propGeneRegions.R ${kb}
 
 ```
 
+## Associate gene expression variance/mean rank metric with genome annotations
 
+Run the partial correlation of gene expression variance/mean rank metrics with each chromHMM annotation. Check if the genes in the top/bottom 5% of expression variance/mean exhibit differences in the proportion of gene regions made up of the annotations. 
 
+Make sure you have the following R packages and their dependencies installed: tidyverse, ppcor
 
+```bash
 
-```R
-
-myFile <- <path/to/suppTable13.xlsx>
-
-library(readxl)
-library(tidyverse)
-
-pLI <- as.data.frame( read_excel( myFile, sheet = c( "Gene Constraint"))) %>% select( gene, pLI)
-
-write.table( pLI, "geneConstraint_pLI.txt", sep = "\t", quote = F, row.names = F, col.names = T)
+Rscript ./pcor_rankVchromHMM.R ${kb} <path/to/crossTissueRank/csv> <path/to/tissueLevelRank/directory>
 
 ```
