@@ -32,6 +32,12 @@ unzip 41586_2016_BFnature19057_MOESM241_ESM.zip
 
 wget https://housekeeping.unicamp.br/Housekeeping_GenesHuman.csv
 
+## match transcript to ensID 
+
+awk -F ';' '{print $1}' Housekeeping_GenesHuman.csv | sed '1d' | sort > er1
+
+sort -k2,2 ./supportingFiles/gencode.ensID.transID.txt | join -1 2 -2 1 -t $'\t' - er1 > HKgenes_ensID_transID.txt
+
 ```
 
 ### Gene regions
@@ -85,6 +91,16 @@ for i in `ls ./baseline_v1.1/*bed`
     bedtools intersect -wao -a ${outGeneLoc} -b ${i} | awk -v OFS="\t" -v ann=${annotation} '{print $1,$2,$3,$4,ann,$8}' > hg19geneRegions_bp_${annotation}_${kb}kb.txt
 
 done
+
+```
+
+Summarize the genome annotation information into proportion of gene regions made up of each of the annotations
+
+Make sure you have the following R packages and their dependencies installed: tidyverse
+
+```bash
+
+Rscript ./summarizeAnnotations_propGeneRegions_Finucane.R ${kb}
 
 ```
 
@@ -151,7 +167,15 @@ Make sure you have the following R packages and their dependencies installed: ti
 
 ```bash
 
-Rscript ./summarizeAnnotations_propGeneRegions.R ${kb}
+Rscript ./summarizeAnnotations_propGeneRegions_chromHMM.R ${kb}
+
+```
+
+## Test for enrichment of various gene classes in top/bottom 5% gene expression variance/mean rank
+
+```bash
+
+Rscript ./hypergeomTests.R <path/to/crossTissueRank/csv>
 
 ```
 
