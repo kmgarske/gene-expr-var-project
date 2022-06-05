@@ -78,7 +78,7 @@ fi
 
 wget https://storage.googleapis.com/broad-alkesgroup-public/LDSCORE/baseline_v1.1_bedfiles.tgz
 
-tar zxvf baseline_v1.1_bedfiles.tgz baseline_v1.1/DHS_peaks_Trynka.bed baseline_v1.1/Enhancer_Hoffman.bed baseline_v1.1/Repressed_Hoffman.bed baseline_v1.1/PromoterFlanking_Hoffman.bed baseline_v1.1/SuperEnhancer_Hnisz.bed baseline_v1.1/Transcribed_Hoffman.bed
+tar zxvf baseline_v1.1_bedfiles.tgz baseline_v1.1/DHS_peaks_Trynka.bed baseline_v1.1/Enhancer_Hoffman.bed baseline_v1.1/Repressed_Hoffman.bed baseline_v1.1/PromoterFlanking_Hoffman.bed baseline_v1.1/SuperEnhancer_Hnisz.bed baseline_v1.1/Transcribed_Hoffman.bed baseline_v1.1/TFBS_ENCODE.bed baseline_v1.1/CTCF_Hoffman.bed 
 
 ## overlap with gene regions
 
@@ -181,7 +181,7 @@ Rscript ./hypergeomTests.R <path/to/crossTissueRank/csv>
 
 ## Associate gene expression variance/mean rank metric with genome annotations
 
-Run the partial correlation of gene expression variance/mean rank metrics with each chromHMM annotation. Check if the genes in the top/bottom 5% of expression variance/mean exhibit differences in the proportion of gene regions made up of the annotations. 
+Run the partial correlation of gene expression variance/mean rank metrics with each genome (Finucane) or chromHMM annotation. Check if the genes in the top/bottom 5% of expression variance/mean exhibit differences in the proportion of gene regions made up of the annotations. 
 
 Make sure you have the following R packages and their dependencies installed: tidyverse, ppcor
 
