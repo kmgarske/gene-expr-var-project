@@ -100,7 +100,7 @@ Make sure you have the following R packages and their dependencies installed: ti
 
 ```bash
 
-Rscript ./summarizeAnnotations_propGeneRegions_Finucane.R ${kb}
+Rscript ./scripts/summarizeAnnotations_propGeneRegions_Finucane.R ${kb}
 
 ```
 
@@ -167,7 +167,7 @@ Make sure you have the following R packages and their dependencies installed: ti
 
 ```bash
 
-Rscript ./summarizeAnnotations_propGeneRegions_chromHMM.R ${kb}
+Rscript ./scripts/summarizeAnnotations_propGeneRegions_chromHMM.R ${kb}
 
 ```
 
@@ -175,7 +175,7 @@ Rscript ./summarizeAnnotations_propGeneRegions_chromHMM.R ${kb}
 
 ```bash
 
-Rscript ./hypergeomTests.R <path/to/crossTissueRank/csv>
+Rscript ./scripts/hypergeomTests.R <path/to/crossTissueRank/csv>
 
 ```
 
@@ -187,6 +187,6 @@ Make sure you have the following R packages and their dependencies installed: ti
 
 ```bash
 
-Rscript ./pcor_rankVchromHMM.R ${kb} <path/to/crossTissueRank/csv> <path/to/tissueLevelRank/directory>
+Rscript ./scripts/pcor_rankVchromHMM.R ${kb} <path/to/crossTissueRank/csv> <path/to/tissueLevelRank/directory>
 
 ```
