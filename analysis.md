@@ -72,39 +72,17 @@ fi
 
 ```
 
-### Genome annotations
+### Immediate early genes
 
 ```bash
 
-wget https://storage.googleapis.com/broad-alkesgroup-public/LDSCORE/baseline_v1.1_bedfiles.tgz
-
-tar zxvf baseline_v1.1_bedfiles.tgz baseline_v1.1/DHS_peaks_Trynka.bed baseline_v1.1/Enhancer_Hoffman.bed baseline_v1.1/Repressed_Hoffman.bed baseline_v1.1/PromoterFlanking_Hoffman.bed baseline_v1.1/SuperEnhancer_Hnisz.bed baseline_v1.1/Transcribed_Hoffman.bed baseline_v1.1/TFBS_ENCODE.bed baseline_v1.1/CTCF_Hoffman.bed 
-
-## overlap with gene regions
-
-for i in `ls ./baseline_v1.1/*bed` 
-
-  do
-  
-    annotation=`echo ${i} | sed 's@./baseline_v1.1/@@' | sed 's/.bed//'`
-    
-    bedtools intersect -wao -a ${outGeneLoc} -b ${i} | awk -v OFS="\t" -v ann=${annotation} '{print $1,$2,$3,$4,ann,$8}' > hg19geneRegions_bp_${annotation}_${kb}kb.txt
-
-done
-
-```
-
-Summarize the genome annotation information into proportion of gene regions made up of each of the annotations
-
-Make sure you have the following R packages and their dependencies installed: tidyverse
-
-```bash
-
-Rscript ./scripts/summarizeAnnotations_propGeneRegions_Finucane.R ${kb}
-
-```
-
-### ChromHMM chromatin states
+ wget https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/3263948/arner_table_S5.xlsx
+ 
+ Rscript ./scripts/cleanIEGfile.R arner_table_S5.xlsx
+ 
+ ```
+ 
+ ### ChromHMM chromatin states
 
 Get the chromHMM chromatin states for various tissues assessed in the current study as well as the universal chromHMM states; overlap with gene regions
 
