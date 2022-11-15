@@ -72,7 +72,7 @@ fi
 
 ```
 
-### Immediate early genes
+### Immediate early genes (IEGs)
 
 ```bash
 
@@ -168,3 +168,7 @@ Make sure you have the following R packages and their dependencies installed: ti
 Rscript ./scripts/pcor_rankVchromHMM.R ${kb} <path/to/crossTissueRank/csv> <path/to/tissueLevelRank/directory>
 
 ```
+
+## Test for enrichment of IEGs in the tissue-level high-variance ranks
+
+
