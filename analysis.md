@@ -1,6 +1,6 @@
-# 
+# Functional genomics and gene set enrichment in high/low-variance genes across tissues in humans
 
-## Download and pre-process the data 
+## Download and pre-process gene sets 
 
 ### Secreted proteins
 
