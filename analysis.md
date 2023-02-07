@@ -149,14 +149,6 @@ Rscript ./scripts/summarizeAnnotations_propGeneRegions_chromHMM.R ${kb}
 
 ```
 
-## Test for enrichment of various gene classes in top/bottom 5% gene expression variance/mean rank
-
-```bash
-
-Rscript ./scripts/hypergeomTests.R <path/to/crossTissueRank/csv>
-
-```
-
 ## Associate gene expression variance/mean rank metric with genome annotations
 
 Run the partial correlation of gene expression variance/mean rank metrics with each genome (Finucane) or chromHMM annotation. Check if the genes in the top/bottom 5% of expression variance/mean exhibit differences in the proportion of gene regions made up of the annotations. 
@@ -166,6 +158,14 @@ Make sure you have the following R packages and their dependencies installed: ti
 ```bash
 
 Rscript ./scripts/pcor_rankVchromHMM.R ${kb} <path/to/crossTissueRank/csv> <path/to/tissueLevelRank/directory>
+
+```
+
+## Test for enrichment of various gene classes in top/bottom 5% gene expression variance/mean rank
+
+```bash
+
+Rscript ./scripts/hypergeomTests.R <path/to/crossTissueRank/csv>
 
 ```
 
