@@ -171,4 +171,10 @@ Rscript ./scripts/hypergeomTests.R <path/to/crossTissueRank/csv>
 
 ## Test for enrichment of IEGs in the tissue-level high-variance ranks
 
+```bash
+
+Rscript ./scripts/IEGs_hypergeom.R ${kb} <path/to/crossTissueRank/csv> <path/to/tissueLevelRank/directory>
+
+```
+
 
