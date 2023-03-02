@@ -141,8 +141,6 @@ bedtools intersect -wao -a ${outGeneLoc} -b ${i} | awk -v OFS="\t" -v tissue=${t
 
 Summarize the chromHMM state information into proportion of gene regions made up of each of the state functional annotations
 
-Make sure you have the following R packages and their dependencies installed: tidyverse
-
 ```bash
 
 Rscript ./scripts/summarizeAnnotations_propGeneRegions_chromHMM.R ${kb}
@@ -151,9 +149,7 @@ Rscript ./scripts/summarizeAnnotations_propGeneRegions_chromHMM.R ${kb}
 
 ## Associate gene expression variance/mean rank metric with genome annotations
 
-Run the partial correlation of gene expression variance/mean rank metrics with each genome (Finucane) or chromHMM annotation. Check if the genes in the top/bottom 5% of expression variance/mean exhibit differences in the proportion of gene regions made up of the annotations. 
-
-Make sure you have the following R packages and their dependencies installed: tidyverse, ppcor
+Run the partial correlation of gene expression variance/mean rank metrics with each chromHMM annotation. Check if the genes in the top/bottom 5% of expression variance/mean exhibit differences in the proportion of gene regions made up of the annotations. 
 
 ```bash
 
