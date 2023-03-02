@@ -106,7 +106,7 @@ done
 
 ## universal
 
-wget https://public.hoffman2.idre.ucla.edu/ernst/1G6UT/hg19_genome_100_segments.bed.gz
+wget https://public.hoffman2.idre.ucla.edu/ernst/UUKP7/hg19_genome_100_segments.bed.gz
 
 gunzip hg19_genome_100_segments.bed.gz
 
