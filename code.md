@@ -173,4 +173,13 @@ Rscript ./scripts/IEGs_hypergeom.R ${kb} <path/to/crossTissueRank/csv> <path/to/
 
 ```
 
+## Make the figures for the paper
+
+```bash
+
+Rscript ./scripts/fnxlGen_highLov_var_mean_heatmap.R ${kb} 
+Rscript ./scripts/fxnlGen_highLow_var_mean_lineplot.R ${kb} <path/to/crossTissueRank/csv> <path/to/tissueLevelRank/directory>
+
+```
+
 
